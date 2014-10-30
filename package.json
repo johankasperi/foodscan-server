@@ -1,7 +1,7 @@
 {
   "name": "foodscan-server",
   "version": "1.0.0",
-  "description": "foodscan-server ===============",
+  "description": "Node.js server for https://github.com/dlindstrm/foodscanner",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,10 +10,16 @@
     "type": "git",
     "url": "https://github.com/johankasperi/foodscan-server.git"
   },
+  "keywords": [
+    "nodejs"
+  ],
   "author": "Johan Kasperi",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/johankasperi/foodscan-server/issues"
   },
-  "homepage": "https://github.com/johankasperi/foodscan-server"
+  "homepage": "https://github.com/johankasperi/foodscan-server",
+  "dependencies": {
+    "underscore": "^1.7.0"
+  }
 }
