@@ -36,9 +36,7 @@ dabasGtin = function (gtin, callback) {
   var article = {};
   dabasOpt.path = '/DABASService/V1/article/gtin/'+gtin+'/json?apikey='+dabasOpt.apiKey;
   httpReq(dabasOpt, function(res) {
-    res.setEncoding('utf8');
-    if(res.statusCode != 200)
-      return callback(null, article);    
+    res.setEncoding('utf8');    
     
     var result = '';
     res.on('data', function(data) { 
@@ -47,7 +45,7 @@ dabasGtin = function (gtin, callback) {
     res.on('end', function() {
       var dabas = JSON.parse(result);
       if(dabas.Artikelbenamning === null)
-        return callback(null, article);
+        return callback("error", null);
 
       article["dabas"] = {
         GTIN: ('GTIN' in dabas) ? dabas.GTIN : null,
@@ -227,10 +225,10 @@ lcafdGetIngredients = function(ingredient, callback) {
 returnResult = function (res, result) {
     if (result) {
       delete result.dabas.ingredientsRaw;
-      res.writeHead(200, { 'Content-Type': 'application/json' })
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
       res.end(JSON.stringify(result, null, 4))
     } else {
-      res.writeHead(404)
+      res.writeHead(404, { 'Access-Control-Allow-Origin': '*' })
       res.end()
     }
 }
