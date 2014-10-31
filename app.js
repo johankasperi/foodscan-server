@@ -58,6 +58,7 @@ dabasGtin = function (gtin, callback) {
         labels: ('Markningar' in dabas) ? dabas.Markningar : null,
         ingredientsRaw: ('Ingredienser' in dabas) ? dabas.Ingredienser : null,
       };
+      article.dabas.producer = article.dabas.producer.substring(0, article.dabas.producer.indexOf("/")-1);
       findProductgroup(article, dabasProductgroups.articles, 1, {}, callback);
     })
   });
@@ -226,7 +227,7 @@ returnResult = function (res, result) {
     if (result) {
       delete result.dabas.ingredientsRaw;
       res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
-      res.end(JSON.stringify(result, null, 4))
+      res.end(JSON.stringify(result))
     } else {
       res.writeHead(404, { 'Access-Control-Allow-Origin': '*' })
       res.end()
