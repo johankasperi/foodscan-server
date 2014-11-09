@@ -35,7 +35,7 @@ httpReq = function(opt, callback) {
 }
 
 dabasGtin = function (gtin, callback) {
-  var dabasProductgroups = JSON.parse(fs.readFileSync('dabas/dabas.json', 'utf8'));
+  var dabasProductgroups = JSON.parse(fs.readFileSync('dabas/categories.json', 'utf8'));
   var article = {};
   apiOpt.dabas.path = '/DABASService/V1/article/gtin/'+gtin+'/json?apikey='+apiOpt.dabas.apiKey;
   httpReq(apiOpt.dabas, function(res) {
