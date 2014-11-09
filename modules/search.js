@@ -11,10 +11,10 @@ var apiOpt = {};
 /**
  * Module export
  */
-module.exports = function(key, callback) {
+module.exports = function(key, limit, callback) {
   fs.readFile('secret/keys.json', function(err, data) {
     apiOpt = JSON.parse(data);
-    dabasSearch(key, callback);
+    dabasSearch(key, limit, callback);
   });
 }
 
@@ -30,7 +30,7 @@ httpReq = function(opt, callback) {
   req.end();   
 }
 
-dabasSearch = function(key, callback) {
+dabasSearch = function(key, limit, callback) {
   apiOpt.dabas.path = '/DABASService/V1/articles/searchparameter/'+encodeURIComponent(key)+'/json?apikey='+apiOpt.dabas.apiKey;
   httpReq(apiOpt.dabas, function(res) {
   	res.setEncoding('utf-8');
@@ -42,6 +42,8 @@ dabasSearch = function(key, callback) {
   		var dabas = JSON.parse(result);
   		if(dabas.length === 0)
   			return callback('error', null);
+      if(limit != null)
+        return callback(null, dabas.slice(0,limit));
   		return callback(null, dabas);
   	})
   });

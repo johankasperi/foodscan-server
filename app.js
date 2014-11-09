@@ -2,6 +2,8 @@ var http = require('http')
     url = require('url')
     gtinModule = require('./modules/gtin.js')
     searchModule = require('./modules/search.js')
+    searchRegexModule = require('./modules/searchRegex.js')
+    allModule = require('./modules/all.js')
 
 /**
  * Main callback function
@@ -25,6 +27,8 @@ var server = http.createServer(function (req, res) {
   if (/^\/api\/get/.test(req.url)) {
     var gtin = parsedUrl.query.gtin;
     var search = parsedUrl.query.search;
+    var searchRegex = parsedUrl.query.searchRegex;
+    var limit = parsedUrl.query.limit;
     if(gtin != null) {
       gtinModule(gtin, function(err, result) {
         if(err)
@@ -33,11 +37,25 @@ var server = http.createServer(function (req, res) {
       });
     }
     else if(search != null) {
-      searchModule(search, function(err, result) {
+      searchModule(search, limit, function(err, result) {
         if(err)
           returnResult(res, null);
         returnResult(res, result);
       });
+    }
+    else if(searchRegex != null) {
+      searchRegexModule(searchRegex, limit, function(err, result) {
+        if(err)
+          returnResult(res, null);
+        returnResult(res, result);
+      });
+    }
+    else {
+      allModule(function(err, result) {
+        if(err)
+          returnResult(res, null)
+        returnResult(res, result);
+      }) 
     }
   }
   else {
