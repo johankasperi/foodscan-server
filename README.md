@@ -1,4 +1,4 @@
 foodscan-server
 ===============
 
-Small node.js server for https://github.com/dlindstrm/foodscanner
+Small node.js proxy server for https://github.com/dlindstrm/foodscanner
