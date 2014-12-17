@@ -30,3 +30,6 @@ node_modules
 # Other
 dabas
 secret
+fetcharticles.js
+modules/gtinDabas.js
+modules/searchDabas.js

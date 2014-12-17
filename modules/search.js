@@ -3,48 +3,35 @@
  * Input: key and callback
  */
 
-var http = require('http')
-	  fs = require('fs')
-
-var apiOpt = {};
+var fs = require('fs')
+    //gtinModule = require("./gtin.js")
 
 /**
  * Module export
  */
-module.exports = function(key, limit, callback) {
-  fs.readFile('secret/keys.json', function(err, data) {
-    apiOpt = JSON.parse(data);
-    dabasSearch(key, limit, callback);
-  });
+module.exports = function(articles, key, limit, callback) {
+  dabasSearch(articles, key, limit, callback);
 }
 
 /**
- * Data from several APIs
+ * Filter dabas/all-articles.json
  */
 
-httpReq = function(opt, callback) {
-  var req = http.request(opt, callback);
-  req.on('error', function(e) {
-    return callback(e);
-  });
-  req.end();   
-}
+dabasSearch = function(articles, key, limit, callback) {
+  var key = key.charAt(0).toUpperCase() + key.slice(1);
+  var regex = new RegExp('.*' + key + '.*', "i");
+  var result = [];
+  for(var i = 0; i<articles.length; i++) {
+  	var obj = articles[i];
+  	if(obj.dabas.name.match(regex)) {
+      result.push(obj)
+  	}
+    if(limit != null && result.length == limit) {
+      return callback(null, result);
+    }
+  }
+  if(result.length < 1)
+    return callback("error", null);
 
-dabasSearch = function(key, limit, callback) {
-  apiOpt.dabas.path = '/DABASService/V1/articles/searchparameter/'+encodeURIComponent(key)+'/json?apikey='+apiOpt.dabas.apiKey;
-  httpReq(apiOpt.dabas, function(res) {
-  	res.setEncoding('utf-8');
-  	var result = '';
-  	res.on('data', function(data) {
-  		result += data;
-  	});
-  	res.on('end', function() {
-  		var dabas = JSON.parse(result);
-  		if(dabas.length === 0)
-  			return callback('error', null);
-      if(limit != null)
-        return callback(null, dabas.slice(0,limit));
-  		return callback(null, dabas);
-  	})
-  });
+  callback(null, result);
 }
